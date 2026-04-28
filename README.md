@@ -10,7 +10,7 @@ Sistema de Punto de Venta — Proyecto BDA UNAM FI 2026-2
 
 | Capa | Tecnología |
 |------|-----------|
-| Frontend | React Native (Expo) |
+| Frontend | React + Vite (web) |
 | Backend | Python FastAPI |
 | Base de datos | MySQL 8.0 |
 | Contenedores | Docker Compose |
@@ -21,19 +21,26 @@ Sistema de Punto de Venta — Proyecto BDA UNAM FI 2026-2
 
 ```
 DBA_PuntoDeVenta/
-├── backend/          # FastAPI + SQLAlchemy
+├── backend/                  # FastAPI + SQLAlchemy
 │   ├── app/
 │   │   ├── main.py
 │   │   ├── database.py
-│   │   ├── models/   # Modelos SQLAlchemy (7 tablas)
-│   │   ├── schemas/  # Schemas Pydantic
-│   │   └── routers/  # Endpoints REST
+│   │   ├── models/           # Modelos SQLAlchemy (7 tablas)
+│   │   ├── schemas/          # Schemas Pydantic
+│   │   └── routers/          # Endpoints REST
 │   ├── Dockerfile
 │   └── requirements.txt
 ├── frontend/
-│   └── POS_Tiendita/ # Expo React Native
+│   └── pos-web/              # Vite + React (web)
+│       ├── src/
+│       │   ├── api/          # Cliente axios
+│       │   ├── context/      # AuthContext (JWT en localStorage)
+│       │   ├── components/   # Layout con sidebar
+│       │   └── pages/        # Login, Home, Productos, NuevaVenta...
+│       ├── index.html
+│       └── package.json
 ├── database/
-│   └── schema.sql    # DDL completo MySQL
+│   └── schema.sql            # DDL completo MySQL
 └── docker-compose.yml
 ```
 
@@ -48,13 +55,19 @@ docker-compose up --build
 - API disponible en: `http://localhost:8000`
 - Documentación interactiva: `http://localhost:8000/docs`
 
+> El frontend se levanta por separado (ver abajo).
+
 ---
 
 ## Levantar manualmente
 
-### Backend
+### Base de datos + Backend
 
 ```bash
+# Solo la BD y el backend con Docker
+docker-compose up --build
+
+# O el backend solo (requiere MySQL corriendo)
 cd backend
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
@@ -65,10 +78,12 @@ uvicorn app.main:app --reload
 ### Frontend
 
 ```bash
-cd frontend/POS_Tiendita
+cd frontend/pos-web
 npm install
-npx expo start
+npm run dev
 ```
+
+Abre `http://localhost:5173` en el navegador.
 
 ---
 

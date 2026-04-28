@@ -23,3 +23,7 @@ Thumbs.db
 
 # Docker
 *.override.yml
+
+# Custom
+DBA_PuntoDeVenta/
+
