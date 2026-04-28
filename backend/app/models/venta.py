@@ -1,0 +1,14 @@
+from sqlalchemy import Column, Integer, Numeric, DateTime, ForeignKey, LargeBinary
+from sqlalchemy.sql import func
+from app.database import Base
+
+
+class Venta(Base):
+    __tablename__ = "Ventas"
+
+    id_venta        = Column(Integer, primary_key=True, index=True)
+    fecha_hora      = Column(DateTime, nullable=False, server_default=func.now())
+    monto_total     = Column(Numeric(10, 2), nullable=False)
+    id_usuario      = Column(Integer, ForeignKey("Usuarios.id_usuario"), nullable=False)
+    id_cliente      = Column(Integer, ForeignKey("Clientes.id_cliente"), nullable=True)
+    archivo_factura = Column(LargeBinary(length=2**32 - 1), nullable=True)
