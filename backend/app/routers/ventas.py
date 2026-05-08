@@ -64,6 +64,7 @@ def crear(data: VentaCreate, db: Session = Depends(get_db)):
             id_producto=d.id_producto,
             cantidad=d.cantidad,
             precio_unitario=d.precio_unitario,
+            subtotal=d.cantidad * d.precio_unitario,
         )
         db.add(detalle)
 

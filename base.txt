@@ -1,0 +1,84 @@
+#CREATE DATABASE pos_tiendita;
+USE pos_tiendita;
+CREATE TABLE CATEGORIA
+(
+	id_categoria         INTEGER AUTO_INCREMENT,
+	nombre               VARCHAR(50) NOT NULL,
+	descripcion          VARCHAR(255) NULL,
+	PRIMARY KEY (id_categoria)
+);
+
+CREATE TABLE CLIENTE
+(
+	id_cliente           INTEGER AUTO_INCREMENT,
+	nombre_completo      VARCHAR(100) NOT NULL,
+	rfc                  VARCHAR(13) NOT NULL,
+	correo_electronico   VARCHAR(100) NOT NULL,
+	PRIMARY KEY (id_cliente)
+);
+
+CREATE UNIQUE INDEX XAK1CLIENTE ON CLIENTE (rfc);
+
+CREATE TABLE PRODUCTO
+(
+	id_producto          INTEGER AUTO_INCREMENT,
+	codigo_barras        VARCHAR(50) NOT NULL,
+	nombre_producto      VARCHAR(100) NOT NULL,
+	precio_venta         DECIMAL(10,2) NOT NULL,
+	stock                INTEGER NOT NULL,
+	imagen_articulo      LONGBLOB NULL,
+	id_categoria         INTEGER NULL,
+	id_proveedor         INTEGER NULL,
+	PRIMARY KEY (id_producto)
+);
+
+CREATE TABLE PROVEEDOR
+(
+	id_proveedor         INTEGER AUTO_INCREMENT,
+	razon_social         VARCHAR(100) NOT NULL,
+	rfc                  VARCHAR(13) NOT NULL,
+	telefono_contacto    VARCHAR(20) NOT NULL,
+	PRIMARY KEY (id_proveedor)
+);
+
+CREATE UNIQUE INDEX XAK1PROVEEDOR ON PROVEEDOR (rfc);
+
+CREATE TABLE USUARIO
+(
+	id_usuario           INTEGER AUTO_INCREMENT,
+	nombre_usuario       VARCHAR(50) NOT NULL,
+	rol                  VARCHAR(20) NOT NULL,
+	password_hash        VARCHAR(255) NOT NULL,
+	PRIMARY KEY (id_usuario)
+);
+
+CREATE UNIQUE INDEX XAK1USUARIO ON USUARIO (nombre_usuario);
+
+CREATE TABLE VENTA
+(
+	id_venta             INTEGER AUTO_INCREMENT,
+	fecha_hora           DATETIME NOT NULL,
+	monto_total          DECIMAL(10,2) NOT NULL,
+	archivo_factura      LONGBLOB NULL,
+	id_usuario           INTEGER NULL,
+	id_cliente           INTEGER NULL,
+	PRIMARY KEY (id_venta)
+);
+
+CREATE TABLE DETALLE_VENTA
+(
+	id_venta             INTEGER NOT NULL,
+	id_producto          INTEGER NOT NULL,
+	cantidad             INTEGER NOT NULL,
+	precio_unitario      DECIMAL(10,2) NOT NULL,
+	subtotal             DECIMAL(10,2) NOT NULL,
+	PRIMARY KEY (id_venta, id_producto)
+);
+
+-- Creación de Llaves Foráneas (Relaciones)
+ALTER TABLE DETALLE_VENTA ADD FOREIGN KEY R_7 (id_venta) REFERENCES VENTA (id_venta);
+ALTER TABLE DETALLE_VENTA ADD FOREIGN KEY R_9 (id_producto) REFERENCES PRODUCTO (id_producto);
+ALTER TABLE PRODUCTO ADD FOREIGN KEY R_2 (id_categoria) REFERENCES CATEGORIA (id_categoria);
+ALTER TABLE PRODUCTO ADD FOREIGN KEY R_3 (id_proveedor) REFERENCES PROVEEDOR (id_proveedor);
+ALTER TABLE VENTA ADD FOREIGN KEY R_4 (id_usuario) REFERENCES USUARIO (id_usuario);
+ALTER TABLE VENTA ADD FOREIGN KEY R_10 (id_cliente) REFERENCES CLIENTE (id_cliente);

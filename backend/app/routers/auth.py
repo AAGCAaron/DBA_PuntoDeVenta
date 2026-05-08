@@ -27,7 +27,15 @@ def create_token(data: dict) -> str:
 @router.post("/login")
 def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     usuario = db.query(Usuario).filter(Usuario.nombre_usuario == form.username).first()
-    if not usuario or not pwd_ctx.verify(form.password, usuario.password_hash):
+    if not usuario:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales incorrectas")
+    
+    # Soporte para las contraseñas falsas de la BD de prueba
+    if usuario.password_hash.startswith("hash_falso"):
+        if form.password != usuario.password_hash:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales incorrectas")
+    else:
+        if not pwd_ctx.verify(form.password, usuario.password_hash):
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales incorrectas")
     token = create_token({"sub": str(usuario.id_usuario), "rol": usuario.rol})
     return {"access_token": token, "token_type": "bearer"}

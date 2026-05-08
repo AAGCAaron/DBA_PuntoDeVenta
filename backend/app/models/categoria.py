@@ -3,7 +3,7 @@ from app.database import Base
 
 
 class Categoria(Base):
-    __tablename__ = "Categorias"
+    __tablename__ = "CATEGORIA"
 
     id_categoria = Column(Integer, primary_key=True, index=True)
     nombre       = Column(String(100), nullable=False)

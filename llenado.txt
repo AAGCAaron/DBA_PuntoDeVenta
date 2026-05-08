@@ -1,0 +1,66 @@
+USE pos_tiendita;
+
+-- 1. Insertar 10 Categorías
+INSERT INTO CATEGORIA (nombre, descripcion) VALUES
+('Abarrotes', 'Productos de despensa, enlatados y semillas'),
+('Lácteos', 'Leche, quesos, yogur y derivados'),
+('Bebidas', 'Refrescos, jugos, aguas y bebidas energéticas'),
+('Botanas', 'Frituras, cacahuates y botanas saladas'),
+('Dulcería', 'Chocolates, gomitas, caramelos y chicles'),
+('Limpieza', 'Detergentes, jabones y productos para el hogar'),
+('Higiene Personal', 'Shampoo, desodorantes, papel higiénico'),
+('Panadería', 'Pan dulce, pan de caja y galletas'),
+('Carnes y Embutidos', 'Jamón, salchichas, tocino y envasados'),
+('Mascotas', 'Alimento para perros y gatos');
+
+-- 2. Insertar 10 Proveedores
+INSERT INTO PROVEEDOR (razon_social, rfc, telefono_contacto) VALUES
+('Distribuidora Bimbo SA de CV', 'BIMB010101AAA', '5551234001'),
+('Coca-Cola Femsa', 'COCA991231XYZ', '5551234002'),
+('PepsiCo México', 'PEPS881122ABC', '5551234003'),
+('Sabritas S. de R.L.', 'SABR771010QWE', '5551234004'),
+('Grupo Lala SAB de CV', 'LALA660909RTY', '5551234005'),
+('Alpura (Ganaderos Productores)', 'ALPU550808UIO', '5551234006'),
+('Procter & Gamble', 'PROC440707PAS', '5551234007'),
+('Nestlé México', 'NEST330606DFG', '5551234008'),
+('Unilever de México', 'UNIL220505HJK', '5551234009'),
+('Purina PetCare', 'PURI110404LZX', '5551234010');
+
+-- 3. Insertar 10 Usuarios (Roles mezclados)
+INSERT INTO USUARIO (nombre_usuario, rol, password_hash) VALUES
+('admin_carlos', 'Admin', 'hash_falso_123'),
+('cajero_juan', 'Cajero', 'hash_falso_456'),
+('cajera_maria', 'Cajero', 'hash_falso_789'),
+('gerente_luis', 'Admin', 'hash_falso_101'),
+('cajera_ana', 'Cajero', 'hash_falso_102'),
+('cajero_pedro', 'Cajero', 'hash_falso_103'),
+('supervisor_ro', 'Admin', 'hash_falso_104'),
+('cajera_sofia', 'Cajero', 'hash_falso_105'),
+('cajero_diego', 'Cajero', 'hash_falso_106'),
+('auditor_sys', 'Auditor', 'hash_falso_107');
+
+-- 4. Insertar 10 Clientes (Incluyendo el Público en General)
+INSERT INTO CLIENTE (nombre_completo, rfc, correo_electronico) VALUES
+('Público en General', 'XAXX010101000', 'sin_correo@tienda.com'),
+('Elena Martínez', 'MARE801210XXX', 'elena.m@email.com'),
+('Roberto Gómez', 'GOMR900515YYY', 'roberto.g@email.com'),
+('Lucía Fernández', 'FERL850320ZZZ', 'lucia.f@email.com'),
+('Javier Hernández', 'HERJ920808ABC', 'javier.h@email.com'),
+('Carmen Salinas', 'SALC781125DEF', 'carmen.s@email.com'),
+('Miguel Ángel Trejo', 'TREM880110GHI', 'miguel.t@email.com'),
+('Patricia López', 'LOPP950909JKL', 'paty.lopez@email.com'),
+('Fernando Ruiz', 'RUIF820412MNO', 'fernando.ruiz@email.com'),
+('Gabriela Torres', 'TORG910724PQR', 'gaby.torres@email.com');
+
+-- 5. Insertar 10 Productos (Asociados a sus categorías y proveedores usando sus IDs 1 al 10)
+INSERT INTO PRODUCTO (codigo_barras, nombre_producto, precio_venta, stock, id_categoria, id_proveedor) VALUES
+('7501000111111', 'Pan Blanco Bimbo Grande', 45.00, 30, 8, 1),
+('7501000222222', 'Coca-Cola Regular 600ml', 18.00, 100, 3, 2),
+('7501000333333', 'Pepsi Cola 600ml', 17.00, 80, 3, 3),
+('7501000444444', 'Papas Sabritas Sal 170g', 42.00, 45, 4, 4),
+('7501000555555', 'Leche Lala Entera 1L', 26.50, 60, 2, 5),
+('7501000666666', 'Leche Alpura Deslactosada 1L', 27.00, 55, 2, 6),
+('7501000777777', 'Detergente Ariel Polvo 1kg', 38.50, 25, 6, 7),
+('7501000888888', 'Nescafé Clásico 225g', 95.00, 15, 1, 8),
+('7501000999999', 'Mayonesa Hellmanns 390g', 32.00, 20, 1, 9),
+('7501000000000', 'Dog Chow Adultos 2kg', 115.00, 10, 10, 10);PRODUCTO

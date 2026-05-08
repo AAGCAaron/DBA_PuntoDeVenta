@@ -3,7 +3,7 @@ from app.database import Base
 
 
 class Cliente(Base):
-    __tablename__ = "Clientes"
+    __tablename__ = "CLIENTE"
 
     id_cliente         = Column(Integer, primary_key=True, index=True)
     nombre_completo    = Column(String(200), nullable=False)

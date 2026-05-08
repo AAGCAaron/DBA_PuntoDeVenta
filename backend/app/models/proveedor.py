@@ -3,7 +3,7 @@ from app.database import Base
 
 
 class Proveedor(Base):
-    __tablename__ = "Proveedores"
+    __tablename__ = "PROVEEDOR"
 
     id_proveedor      = Column(Integer, primary_key=True, index=True)
     razon_social      = Column(String(200), nullable=False)
