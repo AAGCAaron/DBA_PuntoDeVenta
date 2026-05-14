@@ -2,7 +2,7 @@
 
 Sistema de Punto de Venta — Proyecto BDA UNAM FI 2026-2
 
-**Integrantes:** Carranza Paula José Carlos · Gutiérrez Contreras Aldo Aarón · Jasso Vazquez Sara
+**Integrantes:** Carballo Ramírez Hanny · Carranza Paula José Carlos · Gutiérrez Contreras Aldo Aarón · Jasso Vazquez Sara
 
 ---
 
