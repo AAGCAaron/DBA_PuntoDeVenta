@@ -97,6 +97,10 @@ Ventas ──────────< Detalle_Venta
 Usuarios    Clientes
 ```
 
+### Diseño Físico y Storage (Requerimientos CASE)
+Para revisar el detalle de la arquitectura de Tablespaces, Parámetros de Almacenamiento (ROW_FORMAT, MAX_ROWS, AVG_ROW_LENGTH) y la justificación de índices en MySQL InnoDB, consulta:
+👉 [Documentación de Diseño Físico y Storage](./DOCUMENTACION_DISENO_FISICO.md)
+
 ### Datos no estructurados (BLOB)
 
 | Tabla | Campo | Tipo |
