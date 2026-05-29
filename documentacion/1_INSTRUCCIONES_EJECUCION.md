@@ -75,6 +75,21 @@ sudo docker compose up -d --build backend
 
 ---
 
+## 🗑️ Borrar toda la Base de Datos (Empezar de cero)
+
+Si necesitas eliminar absolutamente todas las ventas, clientes y productos creados para que el sistema regrese a su estado original de fábrica (solo con los datos semilla o vacía), debes apagar el sistema y **borrar los volúmenes** de Docker.
+
+En la terminal principal ejecuta:
+
+```bash
+sudo docker compose down -v
+```
+
+> ⚠️ **Atención:** La bandera `-v` (volumes) es la que destruye la base de datos de MySQL de forma permanente.
+> Para volver a arrancar de cero, simplemente vuelve a ejecutar el comando del **Paso 1** (`sudo docker compose up -d --build`).
+
+---
+
 ## 🛑 Apagar todo el sistema
 
 Cuando termines tu presentación o desarrollo:
