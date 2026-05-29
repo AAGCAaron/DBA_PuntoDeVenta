@@ -35,7 +35,19 @@ def obtener_imagen(id_producto: int, db: Session = Depends(get_db)):
     p = db.get(Producto, id_producto)
     if not p or not p.imagen_articulo:
         raise HTTPException(status_code=404, detail="Imagen no encontrada")
-    return Response(content=p.imagen_articulo, media_type="image/jpeg")
+    # Detect MIME type from magic bytes
+    data = p.imagen_articulo
+    if data[:8] == b'\x89PNG\r\n\x1a\n':
+        media_type = "image/png"
+    elif data[:3] == b'\xff\xd8\xff':
+        media_type = "image/jpeg"
+    elif data[:4] == b'GIF8':
+        media_type = "image/gif"
+    elif data[:4] == b'RIFF' and data[8:12] == b'WEBP':
+        media_type = "image/webp"
+    else:
+        media_type = "image/jpeg"
+    return Response(content=data, media_type=media_type, headers={"Cache-Control": "no-cache"})
 
 
 @router.post("/", response_model=ProductoOut, status_code=201)

@@ -38,6 +38,17 @@ def crear(data: UsuarioCreate, db: Session = Depends(get_db)):
     return usuario
 
 
+@router.put("/{id_usuario}/rol", response_model=UsuarioOut)
+def cambiar_rol(id_usuario: int, rol: str, db: Session = Depends(get_db)):
+    usuario = db.get(Usuario, id_usuario)
+    if not usuario:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    usuario.rol = rol
+    db.commit()
+    db.refresh(usuario)
+    return usuario
+
+
 @router.delete("/{id_usuario}", status_code=204)
 def eliminar(id_usuario: int, db: Session = Depends(get_db)):
     usuario = db.get(Usuario, id_usuario)

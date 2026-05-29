@@ -4,7 +4,7 @@ from typing import Literal
 
 class UsuarioCreate(BaseModel):
     nombre_usuario: str
-    rol: Literal["Admin", "Cajero"] = "Cajero"
+    rol: str = "cajero"
     password: str
 
 

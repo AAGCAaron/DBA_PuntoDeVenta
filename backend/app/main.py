@@ -12,6 +12,7 @@ from app.routers import (
     productos,
     ventas,
     auth,
+    dashboard,
 )
 
 Base.metadata.create_all(bind=engine)
@@ -37,6 +38,7 @@ for router in [
     usuarios.router,
     productos.router,
     ventas.router,
+    dashboard.router,
 ]:
     app.include_router(router)
 

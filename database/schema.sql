@@ -1,6 +1,10 @@
 -- POS_Tiendita -- Esquema + Datos de prueba + Tablespaces & Storage
 -- Generado desde base.txt + llenado.txt
 
+-- Forzar codificación UTF-8 para leer este archivo correctamente
+SET NAMES utf8mb4;
+SET CHARACTER SET utf8mb4;
+
 CREATE DATABASE IF NOT EXISTS pos_tiendita CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE pos_tiendita;
 
