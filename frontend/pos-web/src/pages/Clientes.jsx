@@ -37,6 +37,8 @@ function Avatar({ nombre }) {
 
 export default function Clientes() {
   const { usuario } = useAuth()
+  const [clientes, setClientes] = useState([])
+  const [busqueda, setBusqueda] = useState('')
   // Modal Form State
   const [modalVisible, setModalVisible] = useState(false)
   const [clienteEditando, setClienteEditando] = useState(null)
