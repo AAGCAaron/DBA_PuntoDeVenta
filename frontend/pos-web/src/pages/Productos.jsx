@@ -18,13 +18,60 @@ export default function Productos() {
   const fileInputRef = useRef(null)
   const activeProductId = useRef(null)
 
+  const [showModal, setShowModal] = useState(false)
+  const [categorias, setCategorias] = useState([])
+  const [proveedores, setProveedores] = useState([])
+  
+  const [nuevoProd, setNuevoProd] = useState({
+    codigo_barras: '',
+    nombre_producto: '',
+    precio_venta: '',
+    stock: '',
+    id_categoria: '',
+    id_proveedor: ''
+  })
+
+  function cargarCombos() {
+    api.get('/categorias/').then(({ data }) => setCategorias(data)).catch(() => {})
+    api.get('/proveedores/').then(({ data }) => setProveedores(data)).catch(() => {})
+  }
+
   function cargarProductos() {
     api.get('/productos/')
       .then(({ data }) => setProductos(data))
       .catch(() => alert('Error al cargar productos'))
   }
 
-  useEffect(() => { cargarProductos() }, [])
+  useEffect(() => { 
+    cargarProductos()
+    cargarCombos()
+  }, [])
+
+  async function handleCrearProducto(e) {
+    e.preventDefault()
+    try {
+      await api.post('/productos/', {
+        ...nuevoProd,
+        precio_venta: parseFloat(nuevoProd.precio_venta),
+        stock: parseInt(nuevoProd.stock, 10),
+        id_categoria: nuevoProd.id_categoria ? parseInt(nuevoProd.id_categoria, 10) : null,
+        id_proveedor: nuevoProd.id_proveedor ? parseInt(nuevoProd.id_proveedor, 10) : null
+      })
+      setShowModal(false)
+      cargarProductos()
+      setNuevoProd({
+        codigo_barras: '',
+        nombre_producto: '',
+        precio_venta: '',
+        stock: '',
+        id_categoria: '',
+        id_proveedor: ''
+      })
+      alert('Producto creado exitosamente')
+    } catch (err) {
+      alert('Error al crear el producto. Verifica los datos o el código de barras.')
+    }
+  }
 
   function abrirSelector(id_producto) {
     activeProductId.current = id_producto
@@ -71,7 +118,13 @@ export default function Productos() {
 
   return (
     <>
-      <h2 className="page-title">Productos</h2>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h2 className="page-title mb-0">Productos</h2>
+        <button className="btn btn-primary fw-bold" onClick={() => setShowModal(true)}>
+          + Nuevo Producto
+        </button>
+      </div>
+
       <input
         className="input"
         style={{ marginBottom: 16 }}
@@ -150,6 +203,82 @@ export default function Productos() {
               </div>
             )
           })}
+        </div>
+      )}
+
+      {/* Modal para Crear Producto */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-box text-start" style={{ width: 500 }}>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <h5 className="modal-title m-0">Agregar Nuevo Producto</h5>
+              <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+            </div>
+            
+            <form onSubmit={handleCrearProducto}>
+              <div className="mb-3">
+                <label className="form-label">Código de Barras</label>
+                <input type="text" className="form-control" required 
+                  value={nuevoProd.codigo_barras} 
+                  onChange={e => setNuevoProd({...nuevoProd, codigo_barras: e.target.value})} 
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Nombre del Producto</label>
+                <input type="text" className="form-control" required 
+                  value={nuevoProd.nombre_producto} 
+                  onChange={e => setNuevoProd({...nuevoProd, nombre_producto: e.target.value})} 
+                />
+              </div>
+              <div className="row mb-3">
+                <div className="col">
+                  <label className="form-label">Precio Venta ($)</label>
+                  <input type="number" step="0.01" className="form-control" required 
+                    value={nuevoProd.precio_venta} 
+                    onChange={e => setNuevoProd({...nuevoProd, precio_venta: e.target.value})} 
+                  />
+                </div>
+                <div className="col">
+                  <label className="form-label">Stock Inicial</label>
+                  <input type="number" className="form-control" required 
+                    value={nuevoProd.stock} 
+                    onChange={e => setNuevoProd({...nuevoProd, stock: e.target.value})} 
+                  />
+                </div>
+              </div>
+              <div className="row mb-4">
+                <div className="col">
+                  <label className="form-label">Categoría</label>
+                  <select className="form-select" required
+                    value={nuevoProd.id_categoria}
+                    onChange={e => setNuevoProd({...nuevoProd, id_categoria: e.target.value})}
+                  >
+                    <option value="">Seleccione...</option>
+                    {categorias.map(c => (
+                      <option key={c.id_categoria} value={c.id_categoria}>{c.nombre}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="col">
+                  <label className="form-label">Proveedor</label>
+                  <select className="form-select" required
+                    value={nuevoProd.id_proveedor}
+                    onChange={e => setNuevoProd({...nuevoProd, id_proveedor: e.target.value})}
+                  >
+                    <option value="">Seleccione...</option>
+                    {proveedores.map(p => (
+                      <option key={p.id_proveedor} value={p.id_proveedor}>{p.razon_social}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              
+              <div className="d-flex justify-content-end gap-2">
+                <button type="button" className="btn btn-secondary fw-bold" onClick={() => setShowModal(false)}>Cancelar</button>
+                <button type="submit" className="btn btn-primary fw-bold">Guardar Producto</button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </>

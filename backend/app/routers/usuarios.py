@@ -24,18 +24,27 @@ def obtener(id_usuario: int, db: Session = Depends(get_db)):
     return usuario
 
 
+from sqlalchemy.exc import IntegrityError
+
 @router.post("/", response_model=UsuarioOut, status_code=201)
 def crear(data: UsuarioCreate, db: Session = Depends(get_db)):
-    hashed = pwd_ctx.hash(data.password)
-    usuario = Usuario(
-        nombre_usuario=data.nombre_usuario,
-        rol=data.rol,
-        password_hash=hashed,
-    )
-    db.add(usuario)
-    db.commit()
-    db.refresh(usuario)
-    return usuario
+    try:
+        hashed = pwd_ctx.hash(data.password)
+        usuario = Usuario(
+            nombre_usuario=data.nombre_usuario,
+            rol=data.rol,
+            password_hash=hashed,
+        )
+        db.add(usuario)
+        db.commit()
+        db.refresh(usuario)
+        return usuario
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status_code=400, detail="Ese nombre de usuario ya existe. Elige otro.")
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=400, detail=f"Error interno: {str(e)}")
 
 
 @router.put("/{id_usuario}/rol", response_model=UsuarioOut)

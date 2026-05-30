@@ -79,14 +79,14 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-light); font-weight: 700; }
 }
 
 /* For texts inside glass container */
-.glass-container .text-muted { color: var(--text-muted-d) !important; }
-.glass-container h1, 
-.glass-container h2, 
-.glass-container h3, 
-.glass-container h4, 
-.glass-container h5, 
-.glass-container h6,
-.glass-container .fw-bold { color: var(--text-dark) !important; }
+.glass-container .text-muted, .producto-card .text-muted, .login-box .text-muted { color: var(--text-muted-d) !important; }
+.glass-container h1, .producto-card h1, .login-box h1,
+.glass-container h2, .producto-card h2, .login-box h2,
+.glass-container h3, .producto-card h3, .login-box h3,
+.glass-container h4, .producto-card h4, .login-box h4,
+.glass-container h5, .producto-card h5, .login-box h5,
+.glass-container h6, .producto-card h6, .login-box h6,
+.glass-container .fw-bold, .producto-card .fw-bold, .login-box .fw-bold { color: var(--text-dark) !important; }
 .glass-container .text-primary { color: var(--primary) !important; } /* Use solid blue inside light glass */
 
 /* ─── Cards Override (For Dashboard charts, etc) ────────────────────────── */
@@ -193,19 +193,20 @@ label { color: var(--text-light); font-size: 13px; font-weight: 600; }
 /* In case of input inside light glass container or modal */
 .glass-container .form-control, .glass-container .form-select, .glass-container .input,
 .card .form-control, .card .form-select, .card .input,
-.modal-box .form-control, .modal-box .form-select, .modal-box .input {
+.modal-box .form-control, .modal-box .form-select, .modal-box .input,
+.login-box .form-control, .login-box .form-select, .login-box .input {
   background: #ffffff !important;
   border-color: #cbd5e1 !important;
   color: var(--text-dark) !important;
 }
-.glass-container .form-control::placeholder, .card .form-control::placeholder, .modal-box .form-control::placeholder { color: #94a3b8; }
-.glass-container .form-control:focus, .card .form-control:focus, .modal-box .form-control:focus {
+.glass-container .form-control::placeholder, .card .form-control::placeholder, .modal-box .form-control::placeholder, .login-box .form-control::placeholder { color: #94a3b8; }
+.glass-container .form-control:focus, .card .form-control:focus, .modal-box .form-control:focus, .login-box .form-control:focus {
   background: #ffffff !important;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
   border-color: var(--primary) !important;
   color: var(--text-dark) !important;
 }
-.glass-container label, .card label, .modal-box label { color: var(--text-dark); }
+.glass-container label, .card label, .modal-box label, .login-box label { color: var(--text-dark); }
 
 /* ─── Buttons ───────────────────────────────────────────────────────────── */
 .btn {
