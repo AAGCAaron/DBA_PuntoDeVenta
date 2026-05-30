@@ -5,6 +5,15 @@
 SET NAMES utf8mb4;
 USE pos_tiendita;
 
+-- ==========================================================
+-- EVIDENCIA 1: ESTADO INICIAL (Base de datos antes de cargar)
+-- ==========================================================
+SELECT '--- ANTES DE LA CARGA MASIVA ---' AS '';
+SELECT 'Cantidad de Clientes:' AS Metrica, COUNT(*) AS Total FROM CLIENTE;
+SELECT 'Cantidad de Productos:' AS Metrica, COUNT(*) AS Total FROM PRODUCTO;
+SELECT 'Cantidad de Ventas:' AS Metrica, COUNT(*) AS Total FROM VENTA;
+SELECT '==================================================' AS '';
+
 -- 1. Insertar 3 Clientes Nuevos
 INSERT INTO CLIENTE (nombre_completo, rfc, correo_electronico) VALUES
 ('Valeria Sofía Mendoza', 'MENV950312XYZ', 'vale.mendoza@email.com'),
@@ -664,3 +673,11 @@ INSERT INTO DETALLE_VENTA (id_venta, id_producto, cantidad, precio_unitario, sub
 (@ultima_venta, 1, 1, 45.0, 45.0),
 (@ultima_venta, 3, 1, 17.0, 17.0);
 
+-- ==========================================================
+-- EVIDENCIA 2: ESTADO FINAL (Base de datos después de cargar)
+-- ==========================================================
+SELECT '--- DESPUÉS DE LA CARGA MASIVA ---' AS '';
+SELECT 'Cantidad de Clientes:' AS Metrica, COUNT(*) AS Total FROM CLIENTE;
+SELECT 'Cantidad de Productos:' AS Metrica, COUNT(*) AS Total FROM PRODUCTO;
+SELECT 'Cantidad de Ventas:' AS Metrica, COUNT(*) AS Total FROM VENTA;
+SELECT '==================================================' AS '';

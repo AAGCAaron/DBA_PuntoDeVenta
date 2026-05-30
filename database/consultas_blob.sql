@@ -3,6 +3,21 @@
 -- POS Tiendita - Bases de Datos Avanzadas UNAM FI
 -- =========================================================================
 
+SELECT '=========================================================================' AS '';
+SELECT ' PASO 1: VERIFICAR QUE LA BASE DE DATOS ESTÁ VACÍA ANTES DE LA PRUEBA' AS '';
+SELECT '=========================================================================' AS '';
+
+SELECT 'Conteo de Archivos Multimedia (Debe ser 0 antes de tu prueba):' AS '';
+SELECT COUNT(*) AS Total_Archivos_Multimedia FROM EVIDENCIA_MULTIMEDIA;
+
+SELECT 'Conteo de Facturas y Ventas (Debe ser 0 antes de tu prueba):' AS '';
+SELECT COUNT(*) AS Total_Ventas FROM VENTA;
+
+SELECT '' AS '';
+SELECT '=========================================================================' AS '';
+SELECT ' PASO 2: DETALLES DE LOS DATOS (Para verificar DESPUÉS de tu carga)' AS '';
+SELECT '=========================================================================' AS '';
+
 SELECT '--- 1. HISTORIAL DE VENTAS (Query Principal) ---' AS '';
 SELECT 
     v.id_venta, 
