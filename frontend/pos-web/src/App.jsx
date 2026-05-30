@@ -12,6 +12,7 @@ import Clientes from './pages/Clientes'
 import Proveedores from './pages/Proveedores'
 import Categorias from './pages/Categorias'
 import Usuarios from './pages/Usuarios'
+import Multimedia from './pages/Multimedia'
 
 function ProtectedRoute({ children }) {
   const { usuario } = useAuth()
@@ -37,6 +38,7 @@ export default function App() {
             <Route path="proveedores" element={<Proveedores />} />
             <Route path="categorias" element={<Categorias />} />
             <Route path="usuarios" element={<Usuarios />} />
+            <Route path="multimedia" element={<Multimedia />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

@@ -11,6 +11,7 @@ const LINKS = [
   { to: '/clientes',     label: 'Clientes',          emoji: '👤' },
   { to: '/proveedores',  label: 'Proveedores',       emoji: '🏭' },
   { to: '/categorias',   label: 'Categorías',        emoji: '🏷️' },
+  { to: '/multimedia',   label: 'Multimedia',        emoji: '📼' },
 ]
 
 export default function Layout() {

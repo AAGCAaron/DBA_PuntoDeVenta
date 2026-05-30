@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine, Base
 import app.models  # register all models with Base
 
+from fastapi.staticfiles import StaticFiles
 from app.routers import (
     categorias,
     proveedores,
@@ -13,6 +14,7 @@ from app.routers import (
     ventas,
     auth,
     dashboard,
+    multimedia,
 )
 
 Base.metadata.create_all(bind=engine)
@@ -30,6 +32,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Sirviendo archivos estáticos para la evidencia multimedia
+import os
+os.makedirs("uploads", exist_ok=True)
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+
 for router in [
     auth.router,
     categorias.router,
@@ -39,6 +46,7 @@ for router in [
     productos.router,
     ventas.router,
     dashboard.router,
+    multimedia.router,
 ]:
     app.include_router(router)
 

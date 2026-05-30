@@ -164,3 +164,12 @@ INSERT INTO PRODUCTO (codigo_barras, nombre_producto, precio_venta, stock, id_ca
 ('7501000888888', 'Nescafé Clásico 225g',           95.00,  15, 1,  8),
 ('7501000999999', 'Mayonesa Hellmanns 390g',        32.00,  20, 1,  9),
 ('7501000000000', 'Dog Chow Adultos 2kg',          115.00,  10, 10, 10);
+
+-- 4. EVIDENCIA MULTIMEDIA (Requisito de profesora)
+CREATE TABLE EVIDENCIA_MULTIMEDIA (
+    id_archivo INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_archivo VARCHAR(100) NOT NULL,
+    tipo_mime VARCHAR(50) NOT NULL,
+    archivo_blob LONGBLOB NOT NULL,
+    ruta_archivo VARCHAR(255) NOT NULL
+) TABLESPACE = ts_datos ENGINE=InnoDB;

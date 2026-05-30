@@ -13,6 +13,11 @@
 -- *Nota: Aunque MySQL asimilará esta instrucción como un índice regular (B-Tree)
 -- SQL estándar exigida académicamente (CREATE BITMAP INDEX). Sin embargo, 
 -- para que el script corra en MySQL sin errores de sintaxis, usamos CREATE INDEX:
+
+-- Limpieza preventiva
+-- (Eliminado el DROP INDEX porque MySQL no soporta IF EXISTS para índices, 
+-- pero como iniciarás de cero, no habrá problema).
+
 CREATE INDEX idx_bitmap_rol ON USUARIO (rol);
 
 
@@ -23,6 +28,9 @@ CREATE INDEX idx_bitmap_rol ON USUARIO (rol);
 -- (Creamos una tabla demostrativa ya que MySQL requiere que la llave primaria 
 -- incluya la columna de partición).
 
+-- Limpieza preventiva
+DROP TABLE IF EXISTS USUARIO_PARTICIONADO;
+
 CREATE TABLE USUARIO_PARTICIONADO (
     id_usuario INT,
     nombre_usuario VARCHAR(50),
@@ -30,15 +38,19 @@ CREATE TABLE USUARIO_PARTICIONADO (
     PRIMARY KEY (id_usuario, rol)
 )
 PARTITION BY LIST COLUMNS(rol) (
-    PARTITION p_administradores VALUES IN ('Admin', 'admin'),
-    PARTITION p_cajeros VALUES IN ('Cajero', 'cajero'),
-    PARTITION p_inactivos VALUES IN ('Inactivo', 'inactivo')
+    PARTITION p_administradores VALUES IN ('Admin'),
+    PARTITION p_cajeros VALUES IN ('Cajero'),
+    PARTITION p_inactivos VALUES IN ('Inactivo')
 );
 
 
 -- -------------------------------------------------------------------------
 -- 3. COPIA DE UNA TABLA (CON DATOS Y SIN DATOS)
 -- -------------------------------------------------------------------------
+
+-- Limpieza preventiva
+DROP TABLE IF EXISTS PRODUCTO_RESPALDO;
+DROP TABLE IF EXISTS PRODUCTO_HISTORICO;
 
 -- A) Copia CON datos (Clonación de estructura y registros actuales)
 -- Útil para hacer un respaldo rápido de los productos antes de una actualización masiva.
