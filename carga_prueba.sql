@@ -673,6 +673,11 @@ INSERT INTO DETALLE_VENTA (id_venta, id_producto, cantidad, precio_unitario, sub
 (@ultima_venta, 1, 1, 45.0, 45.0),
 (@ultima_venta, 3, 1, 17.0, 17.0);
 
+-- 4. Reabastecer Inventario
+-- Como las ventas históricas de prueba restan stock agresivamente gracias a los Triggers,
+-- reabastecemos el inventario a 100 unidades de cada producto para poder usar el sistema hoy.
+UPDATE PRODUCTO SET stock = 100;
+
 -- ==========================================================
 -- EVIDENCIA 2: ESTADO FINAL (Base de datos después de cargar)
 -- ==========================================================

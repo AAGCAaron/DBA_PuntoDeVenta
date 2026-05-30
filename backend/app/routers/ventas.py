@@ -93,12 +93,12 @@ def obtener_factura_legacy(id_venta: int, db: Session = Depends(get_db)):
 # ─── Crear Venta (auto-genera XML y lo guarda en archivo_factura) ─────────────
 @router.post("/", response_model=VentaOut, status_code=201)
 def crear(data: VentaCreate, db: Session = Depends(get_db)):
-    total = sum(d.cantidad * d.precio_unitario for d in data.detalle)
-
+    # Inicializamos el monto en 0. Los TRIGGERS de la base de datos se 
+    # encargarán de sumar los subtotales automáticamente al insertar los detalles.
     venta = Venta(
         id_usuario=data.id_usuario,
         id_cliente=data.id_cliente,
-        monto_total=total,
+        monto_total=0,
     )
     db.add(venta)
     db.flush()  # get venta.id_venta before commit
@@ -110,7 +110,7 @@ def crear(data: VentaCreate, db: Session = Depends(get_db)):
             raise HTTPException(status_code=404, detail=f"Producto {d.id_producto} no encontrado")
         if producto.stock < d.cantidad:
             raise HTTPException(status_code=400, detail=f"Stock insuficiente para {producto.nombre_producto}")
-        producto.stock -= d.cantidad
+        
         detalle = DetalleVenta(
             id_venta=venta.id_venta,
             id_producto=d.id_producto,
@@ -126,13 +126,17 @@ def crear(data: VentaCreate, db: Session = Depends(get_db)):
             "subtotal": d.cantidad * d.precio_unitario,
         })
 
-    # Auto-generar y guardar XML como archivo_factura en el BLOB
+    # 1. Flush para que los TRIGGERS de MySQL se disparen y calculen el total
+    db.flush()
+    db.refresh(venta)
+
+    # Auto-generar y guardar XML como archivo_factura en el BLOB usando el total real de la BD
     usuario = db.get(Usuario, data.id_usuario)
     cliente = db.get(Cliente, data.id_cliente) if data.id_cliente else None
     xml_bytes = generar_xml(
         venta_id=venta.id_venta,
         fecha_hora=venta.fecha_hora,
-        monto_total=float(total),
+        monto_total=float(venta.monto_total),
         detalles=detalles_info,
         nombre_usuario=usuario.nombre_usuario if usuario else "N/A",
         nombre_cliente=cliente.nombre_completo if cliente else "Público General",
@@ -164,10 +168,7 @@ def eliminar(id_venta: int, db: Session = Depends(get_db)):
     # Return stock and delete details
     detalles = db.query(DetalleVenta).filter(DetalleVenta.id_venta == id_venta).all()
     for d in detalles:
-        producto = db.get(Producto, d.id_producto)
-        if producto:
-            producto.stock += d.cantidad
-        db.delete(d)
+        db.delete(d) # Triggers in DB will automatically return the stock
         
     db.delete(v)
     db.commit()

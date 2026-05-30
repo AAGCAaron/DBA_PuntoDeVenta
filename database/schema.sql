@@ -103,6 +103,52 @@ ALTER TABLE PRODUCTO      ADD FOREIGN KEY R_3  (id_proveedor) REFERENCES PROVEED
 ALTER TABLE VENTA         ADD FOREIGN KEY R_4  (id_usuario)  REFERENCES USUARIO  (id_usuario);
 ALTER TABLE VENTA         ADD FOREIGN KEY R_10 (id_cliente)  REFERENCES CLIENTE  (id_cliente);
 
+-- ─── TRIGGERS (Reglas de Negocio en BD) ──────────────────────────────────────
+
+DELIMITER //
+
+-- Trigger 1: Auto-calcular subtotal ANTES de insertar un detalle
+CREATE TRIGGER trg_calcular_subtotal
+BEFORE INSERT ON DETALLE_VENTA
+FOR EACH ROW
+BEGIN
+    SET NEW.subtotal = NEW.cantidad * NEW.precio_unitario;
+END; //
+
+-- Trigger 2: Restar stock y sumar al total de la venta DESPUÉS de insertar
+CREATE TRIGGER trg_venta_insert
+AFTER INSERT ON DETALLE_VENTA
+FOR EACH ROW
+BEGIN
+    -- 1. Restar inventario
+    UPDATE PRODUCTO 
+    SET stock = stock - NEW.cantidad 
+    WHERE id_producto = NEW.id_producto;
+    
+    -- 2. Sumar el subtotal al gran total de la factura
+    UPDATE VENTA
+    SET monto_total = monto_total + NEW.subtotal
+    WHERE id_venta = NEW.id_venta;
+END; //
+
+-- Trigger 3: Devolver stock y restar del total si se elimina un detalle
+CREATE TRIGGER trg_venta_delete
+AFTER DELETE ON DETALLE_VENTA
+FOR EACH ROW
+BEGIN
+    -- 1. Devolver inventario
+    UPDATE PRODUCTO 
+    SET stock = stock + OLD.cantidad 
+    WHERE id_producto = OLD.id_producto;
+    
+    -- 2. Restar del gran total de la factura
+    UPDATE VENTA
+    SET monto_total = monto_total - OLD.subtotal
+    WHERE id_venta = OLD.id_venta;
+END; //
+
+DELIMITER ;
+
 -- ─── DATOS ────────────────────────────────────────────────────────────────────
 
 INSERT INTO CATEGORIA (nombre, descripcion) VALUES

@@ -77,3 +77,12 @@ SELECT
     IF(imagen_articulo IS NOT NULL, 'Imagen_Guardada', 'Sin_Imagen') AS Estado_Imagen,
     LENGTH(imagen_articulo) AS Tamano_Bytes
 FROM PRODUCTO;
+
+SELECT '--- 6. GESTIÓN DE USUARIOS Y ROLES (Panel de Administración) ---' AS '';
+SELECT 
+    id_usuario,
+    nombre_usuario,
+    rol AS 'Nivel_de_Acceso',
+    IF(password_hash IS NOT NULL AND password_hash != '', 'Encriptado (OK)', 'Sin Seguridad') AS Estado_Password
+FROM USUARIO
+ORDER BY rol ASC, id_usuario ASC;
